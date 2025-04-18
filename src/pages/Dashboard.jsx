@@ -8,10 +8,11 @@ import { faComment } from '@fortawesome/free-solid-svg-icons'
 import { faGear } from '@fortawesome/free-solid-svg-icons'
 import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import avatarImg from "../assets/avatarImg.png";
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
     const [isOpen, setIsOpen] = useState(false)
+    let navigate=useNavigate();
 
     return (
         <div className='flex flex-col mini-desktop:flex-row w-full items-center'>
@@ -71,7 +72,10 @@ const Dashboard = () => {
                                 <span className='text-[1.1rem]'>Settings</span>
                             </button>
                         </Link>
-                        <button className='flex items-center w-full gap-[1.2rem] px-[1.5rem] py-[0.7rem] rounded-lg hover:bg-red-100 hover:text-red-400 cursor-pointer transition-all focus:bg-red-100 focus:text-red-400'>
+                        <button className='flex items-center w-full gap-[1.2rem] px-[1.5rem] py-[0.7rem] rounded-lg hover:bg-red-100 hover:text-red-400 cursor-pointer transition-all focus:bg-red-100 focus:text-red-400'onClick={()=>{
+                            localStorage.removeItem("email");
+                            navigate("/");
+                        }}>
                             <FontAwesomeIcon icon={faArrowRightFromBracket} className='' />
                             <span className='text-[1.1rem]'>Log Out</span>
                         </button>

@@ -3,7 +3,7 @@ import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import Footer from './components/Footer'
 import Login from './pages/Login'
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Route, Routes, useLocation,useNavigate } from 'react-router-dom'
 import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
 import UploadPitch from './pages/UploadPitch'
@@ -12,12 +12,27 @@ import Settings from './pages/Settings'
 import FindPitches from './pages/FindPitches'
 import SavedPitches from './pages/SavedPitches'
 import PitchDetails from './pages/PitchDetails'
+import Otp_verification from './pages/Otp_verification'
+import { useEffect } from 'react'
 
 const App = () => {
   const location = useLocation();
   const hideNavbar = location.pathname.startsWith("/user/");
   const hideFooter = location.pathname.startsWith("/user/");
   const showDashboard = location.pathname.startsWith("/user/");
+  const navigate=useNavigate();
+
+
+  useEffect(()=>{
+    let email=localStorage.getItem("email");
+    console.log(email);
+      if(email!=null){
+          setTimeout(()=>{
+            navigate("/user/founder/profile");
+          },5000)
+      }
+  },[navigate])
+
 
   return (
     <div className='min-h-screen flex flex-col bg-nav-white'>
@@ -40,6 +55,7 @@ const App = () => {
           <Route path='/user/investor/find-pitches' element={<FindPitches />} />
           <Route path='/user/investor/find-pitches/pitch-id-11' element={<PitchDetails />} />
           <Route path='/user/investor/saved-pitches' element={<SavedPitches />} />
+          <Route path='/account/otp_verification' element={<Otp_verification />} />
         </Routes>
       </main>
       {!hideFooter &&

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import headLogo from "../assets/headLogo(black).png";
 import googleImg from "../assets/googleImg.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -9,6 +9,13 @@ const Login = () => {
     const handleLogIn = (e) => {
         e.preventDefault();
     }
+
+let [email,setEmail]=useState();
+let [password,setPassword]=useState();
+
+
+
+
 
     return (
         <div className='flex flex-col justify-center items-center px-[2rem]'>
@@ -30,7 +37,8 @@ const Login = () => {
                     <form onSubmit={handleLogIn} className='w-full flex flex-col justify-center items-center'>
                         <div className='flex flex-col items-start w-full font-Regular mt-[1rem]'>
                             <span className='text-[1.1rem]'>Email address</span>
-                            <input type="text" placeholder='Enter your email address' className='border-border w-full border-[1px] mt-[0.5rem] rounded-lg px-[0.8rem] py-[0.5rem] outline-txt-gray-black-black' />
+                            <input type="text" placeholder='Enter your email address' className='border-border w-full border-[1px] mt-[0.5rem] rounded-lg px-[0.8rem] py-[0.5rem] outline-txt-gray-black-black' value={email}
+                            onClick={(e)=>setEmail(e.target.value)}/>
                         </div>
                         <div className='flex flex-col items-start w-full font-Regular mt-[1rem]'>
                             <span className='text-[1.1rem]'>Password</span>
