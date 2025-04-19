@@ -23,14 +23,14 @@ const App = () => {
 
   const isUserRoute = location.pathname.startsWith("/user/");
 
-  useEffect(() => {
-    const email = localStorage.getItem("email");
-    if (email) {
-      setTimeout(() => {
-        navigate("/user/founder/profile");
-      }, 3000);
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  //   const email = localStorage.getItem("email");
+  //   if (email) {
+  //     setTimeout(() => {
+  //       navigate("/user/founder/profile");
+  //     }, 3000);
+  //   }
+  // }, [navigate]);
 
   return (
     <div className='min-h-screen flex flex-col bg-nav-white'>

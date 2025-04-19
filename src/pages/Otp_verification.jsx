@@ -4,10 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import headLogo from "../assets/headLogo(black).png";
 import { Link, useNavigate } from 'react-router-dom';
-import { signupUserWithEmailAndPassword } from '../context/firebase';
+// Otp_verification.jsx
+import { useFirebase } from '../context/firebase';
+
 
 const Otp_verification = () => {
   const navigate = useNavigate();
+  const firebase = useFirebase();
 
   const [condition, setCondition] = useState("");
   const [otpSent, setOtpSent] = useState("Send Otp");
@@ -65,7 +68,7 @@ const Otp_verification = () => {
 
       try {
         const { email1, password1, name1, lastName1 } = JSON.parse(localStorage.getItem("form"));
-        signupUserWithEmailAndPassword(email1, password1, name1, lastName1, navigate);
+        firebase.signupUserWithEmailAndPassword(email1, password1, name1, lastName1);
       } catch (error) {
         console.error("Signup after OTP error:", error);
         alert("Something went wrong.");
@@ -104,7 +107,7 @@ const Otp_verification = () => {
         {otpSent}
       </button>
 
-      <Link to={condition === "Otp Sent Successfully!!" ? `/user/founder/profile` : `/account/signup`}>
+      <Link to={condition === "Otp Sent Successfully!!" ?((JSON.parse(localStorage.getItem("form"))).role1 === "Founder" ? "/user/founder/profile" : "/user/investor/find-pitches" ): `/account/signup`}>
         <button
           className={`px-5 py-2 bg-[#A7A6A6] rounded-4xl hover:border-2-black mt-4 ${counter === null ? 'flex' : 'hidden'}`}
           onClick={() => localStorage.setItem("email", JSON.parse(localStorage.getItem("form"))?.email1)}>

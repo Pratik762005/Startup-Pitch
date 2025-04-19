@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext,  useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -9,8 +9,14 @@ import {
   sendSignInLinkToEmail,
   onAuthStateChanged,
   signOut,
+  updateProfile
 } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+
+
+
+// Removed duplicate declaration of useFirebase
+
 
 const FirebaseContext = createContext(null);
 
@@ -23,15 +29,49 @@ const firebaseConfig = {
   appId: "1:428561967266:web:f173dec8cfee0f8286cffb",
 };
 
+export const useFirebase = () => useContext(FirebaseContext);
+
 const firebaseApp = initializeApp(firebaseConfig);
 const firestore = getFirestore(firebaseApp);
 const auth = getAuth(firebaseApp);
 const googleProvider = new GoogleAuthProvider();
 
-const signupUserWithEmailAndPassword = async (email, password, name, lastName, navigate) => {
+
+export const FirebaseProvider = ({ children }) => {
+ const [user, setUser] = useState(null);
+
+useEffect(() => {
+  onAuthStateChanged(auth, user => {
+    if (user) setUser(user);
+    else setUser(null)
+    
+    });
+}, [])
+
+const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    setUser(user);
+  } else {
+    setUser(null);
+  }
+  setLoading(false); // ⬅️ auth status resolved
+});
+}, []);
+
+
+
+
+const signupUserWithEmailAndPassword = async (email, password, name, lastName, navigate,) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
+
+    await updateProfile(user, {
+      displayName: `${name} ${lastName}`
+    });
 
     const role = JSON.parse(localStorage.getItem("form"))?.role1;
     if (!role) {
@@ -53,13 +93,13 @@ const signupUserWithEmailAndPassword = async (email, password, name, lastName, n
 
     await setDoc(userRef, userData);
     alert("Signup successful!");
-    navigate("/account/otp_verification");
+    navigate("/account/signup");
   } catch (error) {
     console.error("Signup Error:", error);
     alert(error.message);
   }
 };
-export { signupUserWithEmailAndPassword };
+// export { signupUserWithEmailAndPassword };
 
 const signinUserWithEmailAndPass = (email, password) =>
   signInWithEmailAndPassword(auth, email, password);
@@ -119,8 +159,12 @@ const signupWithGoogle = async (navigate, role) => {
       navigate(`/user/${role.toLowerCase()}/profile`);
     }
   } catch (error) {
-    console.error("Google Signup Error:", error);
-    alert("Something went wrong during Google Signup.");
+    if (error.code === 'auth/popup-blocked') {
+      alert('Please allow popups from this website to complete the Google signin process.');
+    } else {
+      console.error('Google Signup Error:', error);
+      alert('Something went wrong during Google signin. Please try again.');
+    }
   }
 };
 
@@ -134,7 +178,7 @@ const signinWithGoogle = async (navigate) => {
     const investorSnap = await getDoc(doc(firestore, "Investor", user.uid));
 
     if (founderSnap.exists() || investorSnap.exists()) {
-      navigate("/");
+      navigate("/user/founder/profile");
     } else {
       await user.delete();
       await signOut(auth);
@@ -147,19 +191,22 @@ const signinWithGoogle = async (navigate) => {
   }
 };
 
-export const useFirebase = () => useContext(FirebaseContext);
+// export const useFirebase = () => useContext(FirebaseContext);
 
-export const FirebaseProvider = ({ children }) => {
-  return (
-    <FirebaseContext.Provider
+const isLoggedIn = user ? true : false;
+ 
+  return <FirebaseContext.Provider
       value={{
         signinWithGoogle,
         signupWithGoogle,
         signupUserWithEmailAndPassword,
         signinUserWithEmailAndPass,
+        isLoggedIn,
+        user,
+        loading
       }}
     >
       {children}
     </FirebaseContext.Provider>
-  );
+  
 };
