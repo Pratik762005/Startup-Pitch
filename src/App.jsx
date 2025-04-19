@@ -15,6 +15,7 @@ import FindPitches from './pages/FindPitches';
 import SavedPitches from './pages/SavedPitches';
 import PitchDetails from './pages/PitchDetails';
 import Otp_verification from './pages/Otp_verification';
+import Viewpitches  from './pages/Viewpitches';
 
 const App = () => {
   const firebase = useFirebase();
@@ -48,6 +49,7 @@ const App = () => {
           <Route path='/user/founder/profile' element={<Profile />} />
           <Route path='/user/founder/create-pitch' element={<UploadPitch />} />
           <Route path='/user/founder/settings' element={<Settings />} />
+          <Route path='/user/founder/view-pitches' element={<Viewpitches />} />
 
           {/* Investor routes */}
           <Route path='/user/investor/find-pitches' element={<FindPitches />} />

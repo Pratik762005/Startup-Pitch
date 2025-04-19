@@ -94,16 +94,33 @@ const Dashboard = () => {
                                 </Link>
                             </li>
                             <li>
-                                <button className='flex items-center w-full gap-[1.2rem] px-[1.5rem] py-[0.7rem] rounded-lg hover:bg-blue-50 hover:text-btn-blue cursor-pointer transition-all focus:bg-blue-50 focus:text-btn-blue'>
+                            <Link to='/user/founder/view-pitches'>
+                            <button className='flex items-center w-full gap-[1.2rem] px-[1.5rem] py-[0.7rem] rounded-lg hover:bg-blue-50 hover:text-btn-blue cursor-pointer transition-all focus:bg-blue-50 focus:text-btn-blue'>
+                                    <FontAwesomeIcon icon={faChartLine} className='' />
+                                    <span className='text-[1.1rem]'>View Pitch's</span>
+                                </button>
+                            </Link>
+                               
+                               
+                            </li>
+                           
+                            <li>
+                            <Link to='/user/founder/analytics'>
+                            <button className='flex items-center w-full gap-[1.2rem] px-[1.5rem] py-[0.7rem] rounded-lg hover:bg-blue-50 hover:text-btn-blue cursor-pointer transition-all focus:bg-blue-50 focus:text-btn-blue'>
                                     <FontAwesomeIcon icon={faChartLine} className='' />
                                     <span className='text-[1.1rem]'>Analytics</span>
                                 </button>
+                            </Link> 
                             </li>
+                           
                             <li>
-                                <button className='flex items-center w-full gap-[1.2rem] px-[1.5rem] py-[0.7rem] rounded-lg hover:bg-blue-50 hover:text-btn-blue cursor-pointer transition-all focus:bg-blue-50 focus:text-btn-blue'>
+                            <Link to='/user/founder/feedback'>
+                            <button className='flex items-center w-full gap-[1.2rem] px-[1.5rem] py-[0.7rem] rounded-lg hover:bg-blue-50 hover:text-btn-blue cursor-pointer transition-all focus:bg-blue-50 focus:text-btn-blue'>
                                     <FontAwesomeIcon icon={faComment} className='' />
                                     <span className='text-[1.1rem]'>Feedback</span>
                                 </button>
+                            </Link>
+                               
                             </li>
                         </ul>
                     </div>

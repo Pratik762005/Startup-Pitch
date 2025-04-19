@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import PitchCard from '../components/PitchCard'
+import { useFirebase } from '../context/firebase'
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useParams } from 'react-router-dom'
 
 const FindPitches = () => {
+    
+    console.log(props);
     return (
         <div className='flex flex-col w-full'>
             <div className='w-full mini-desktop:w-auto px-[1.5rem] py-[1rem] mt-[4.6rem] mini-desktop:ml-[20rem]'>

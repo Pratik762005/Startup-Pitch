@@ -1,8 +1,29 @@
-import React from 'react'
+import React ,{ useState} from 'react'
+import {useFirebase, } from '../context/firebase'
 
 const UploadPitch = () => {
-    const handlePitchSubmit = (e) => {
+
+    const firebase = useFirebase();
+    
+    const [pitchTitle,setpitchTitle ] = useState('');
+    const [pitchDetails, setpitchDetails] = useState('');
+    const [category, setcategory] = useState('');
+    const [fundinggoles, setfundinggoles] = useState('');
+    const [usetags, setusetags] = useState('');
+
+
+    
+
+    
+    const handlePitchSubmit = async (e) => {
         e.preventDefault();
+        await firebase.handleCreateNewPitch(
+            pitchTitle,
+            pitchDetails,
+            category,
+            fundinggoles,
+            usetags
+        )
     }
 
     return (
@@ -12,19 +33,19 @@ const UploadPitch = () => {
                 <form onSubmit={handlePitchSubmit} className='mt-[1.4rem] flex flex-col bg-cream-white border-dash-border border-[2px] px-[1.5rem] py-[1.5rem] rounded-lg gap-[1.5rem]'>
                     <div className='flex flex-col gap-[0.5rem]'>
                         <label className='font-Medium text-txt-black text-[1.2rem]'>Pitch Title</label>
-                        <input type="text" placeholder='Enter a pitch title' className='w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]' />
+                        <input onChange={e => setpitchTitle(e.target.value)} value={pitchTitle} type="text" placeholder='Enter a pitch title' className='w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]' />
                     </div>
                     <div className='flex flex-col gap-[0.5rem]'>
                         <label className='font-Medium text-txt-black text-[1.2rem]'>Pitch Details</label>
-                        <textarea type="" placeholder='Describe your pitch...' className='w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.6rem] h-[10rem] border-border border-[2px] resize-none' />
+                        <textarea onChange={e => setpitchDetails(e.target.value)} value={pitchDetails} type="" placeholder='Describe your pitch...' className='w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.6rem] h-[10rem] border-border border-[2px] resize-none' />
                     </div>
                     <div className='flex flex-col gap-[0.5rem]'>
                         <label className='font-Medium text-txt-black text-[1.2rem]'>Upload File</label>
-                        <input type="file" className='w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px] cursor-pointer' />
+                        <input  type="file" className='w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px] cursor-pointer' />
                     </div>
                     <div className='flex flex-col gap-[0.5rem]'>
                         <label className='font-Medium text-txt-black text-[1.2rem]'>Pitch Category</label>
-                        <select className='w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]'>
+                        <select onChange={e => setcategory(e.target.value)} value={category} className='w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]'>
                             <option value="Choose a category">Choose a category</option>
                             <option value="tech">Tech</option>
                             <option value="medical">Medical</option>
@@ -34,13 +55,14 @@ const UploadPitch = () => {
                     </div>
                     <div className='flex flex-col gap-[0.5rem]'>
                         <label className='font-Medium text-txt-black text-[1.2rem]'>Funding Goal ($)</label>
-                        <input type="number" min="0" className='w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]' />
+                        <input onChange={e => setfundinggoles(e.target.value)} value={fundinggoles} type="number" min="0" className='w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]' />
                     </div>
                     <div className='flex flex-col gap-[0.5rem]'>
                         <label className='font-Medium text-txt-black text-[1.2rem]'>Tags (comma-separated)</label>
-                        <input type="text" placeholder='e.g. AI, Startup, Tech' className='w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]' />
+                        <input onChange={e => setusetags(e.target.value)} value={usetags} type="text" placeholder='e.g. AI, Startup, Tech' className='w-full bg-nav-white text-txt-gray-black font-Regular rounded-lg px-[0.8rem] py-[0.4rem] border-border border-[2px]' />
                     </div>
-                    <button className='font-Regular text-nav-white bg-btn-blue py-[0.4rem] text-[1.1rem] rounded-lg cursor-pointer hover:bg-hover-blue transition-all'>
+                    <button type='onSubmit' 
+                    className='font-Regular text-nav-white bg-btn-blue py-[0.4rem] text-[1.1rem] rounded-lg cursor-pointer hover:bg-hover-blue transition-all'>
                         Create Pitch
                     </button>
                 </form>

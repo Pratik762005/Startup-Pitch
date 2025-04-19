@@ -9,9 +9,14 @@ import {
   sendSignInLinkToEmail,
   onAuthStateChanged,
   signOut,
-  updateProfile
+  updateProfile,
+  signInWithRedirect
 } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import { getFirestore, 
+  doc,
+   getDoc, setDoc, 
+   collection, addDoc,
+    getDocs, query, where } from "firebase/firestore";
 
 
 
@@ -37,7 +42,7 @@ const auth = getAuth(firebaseApp);
 const googleProvider = new GoogleAuthProvider();
 
 
-export const FirebaseProvider = ({ children }) => {
+export const FirebaseProvider = (props) => {
  const [user, setUser] = useState(null);
 
 useEffect(() => {
@@ -106,7 +111,7 @@ const signinUserWithEmailAndPass = (email, password) =>
 
 const signupWithGoogle = async (navigate, role) => {
   try {
-    const result = await signInWithPopup(auth, googleProvider);
+    const result = await signInWithRedirect(auth, googleProvider);
     const user = result.user;
 
     if (!role) {
@@ -171,7 +176,7 @@ const signupWithGoogle = async (navigate, role) => {
 
 const signinWithGoogle = async (navigate) => {
   try {
-    const result = await signInWithPopup(auth, googleProvider);
+    const result = await signInWithRedirect(auth, googleProvider);
     const user = result.user;
 
     const founderSnap = await getDoc(doc(firestore, "Founder", user.uid));
@@ -191,6 +196,41 @@ const signinWithGoogle = async (navigate) => {
   }
 };
 
+const handleCreateNewPitch = async (pitch, PitchDetails, category, funding_goal, tags) => {
+    await addDoc(collection(firestore, 'Pitchs'), {
+      pitch,
+      PitchDetails,
+      category,
+      funding_goal,
+      tags
+    })
+  };
+  
+  const fetchMyPitch = async (uid) => {
+    const collectionRef = collection(firestore, 'Founder');
+    const q = query(collectionRef, where('uid', '==', uid));
+    const result = await getDoc(q);
+    return result;
+  };
+
+  const listAllPitchs = () => {
+    return getDocs(collection(firestore, 'Pitchs'))
+  }
+
+  const getPitchByID = async (id) => {
+    const docRef = doc(firestore, 'Pitchs', id);
+    const result = await getDoc(docRef);
+    return result;
+  }
+
+// const yourPitch = async (PitchDetails, qty) =>{
+//   const collectionRef = collection(firestore, 'Founder', Your_Pitch);
+//   const result = await addDoc(collectionRef, {
+
+//   })
+
+// }
+
 // export const useFirebase = () => useContext(FirebaseContext);
 
 const isLoggedIn = user ? true : false;
@@ -203,10 +243,15 @@ const isLoggedIn = user ? true : false;
         signinUserWithEmailAndPass,
         isLoggedIn,
         user,
-        loading
+        loading,
+      handleCreateNewPitch,
+      fetchMyPitch,
+      listAllPitchs,
+      getPitchByID
+        
       }}
     >
-      {children}
+      {props.children}
     </FirebaseContext.Provider>
   
 };
