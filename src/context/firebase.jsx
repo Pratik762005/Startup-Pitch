@@ -69,7 +69,7 @@ onAuthStateChanged(auth, (user) => {
 
 
 
-const signupUserWithEmailAndPassword = async (email, password, name, lastName, navigate,) => {
+const signupUserWithEmailAndPassword = async (email, password, name, lastName,) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
@@ -111,7 +111,7 @@ const signinUserWithEmailAndPass = (email, password) =>
 
 const signupWithGoogle = async (navigate, role) => {
   try {
-    const result = await signInWithRedirect(auth, googleProvider);
+    const result = await signInWithPopup(auth, googleProvider);
     const user = result.user;
 
     if (!role) {
@@ -174,16 +174,26 @@ const signupWithGoogle = async (navigate, role) => {
 };
 
 
-const signinWithGoogle = async (navigate) => {
+const signinWithGoogle = async (role,navigate) => {
   try {
-    const result = await signInWithRedirect(auth, googleProvider);
+    const result = await signInWithPopup(auth, googleProvider);
     const user = result.user;
 
     const founderSnap = await getDoc(doc(firestore, "Founder", user.uid));
     const investorSnap = await getDoc(doc(firestore, "Investor", user.uid));
 
     if (founderSnap.exists() || investorSnap.exists()) {
-      navigate("/user/founder/profile");
+      if (founderSnap.exists()) {
+        const role = founderSnap.data().role;
+        alert("Login successful!");
+        navigate(`/user/founder/profile`);
+      }
+      if (investorSnap.exists()) {
+        const role = investorSnap.data().role;
+        alert("Login successful!");
+        navigate(`/user/investor/profile`);
+      }
+
     } else {
       await user.delete();
       await signOut(auth);
@@ -220,7 +230,7 @@ const handleCreateNewPitch = async (pitch, PitchDetails, category, funding_goal,
   const getPitchByID = async (id) => {
     const docRef = doc(firestore, 'Pitchs', id);
     const result = await getDoc(docRef);
-    return result;
+    return r
   }
 
 // const yourPitch = async (PitchDetails, qty) =>{
@@ -246,8 +256,7 @@ const isLoggedIn = user ? true : false;
         loading,
       handleCreateNewPitch,
       fetchMyPitch,
-      listAllPitchs,
-      getPitchByID
+      listAllPitchs
         
       }}
     >

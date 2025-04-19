@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom'
 
 const FindPitches = () => {
     
-    console.log(props);
+    // console.log(props);
     return (
         <div className='flex flex-col w-full'>
             <div className='w-full mini-desktop:w-auto px-[1.5rem] py-[1rem] mt-[4.6rem] mini-desktop:ml-[20rem]'>

@@ -6,11 +6,11 @@ import { BrowserRouter } from 'react-router-dom'
 import { FirebaseProvider } from './context/firebase.jsx'
 
 createRoot(document.getElementById('root')).render(
-
-  <BrowserRouter>
+  
   <FirebaseProvider>
+  <BrowserRouter>
     <App />
-  </FirebaseProvider>
 </BrowserRouter>
+  </FirebaseProvider>
 
 )
